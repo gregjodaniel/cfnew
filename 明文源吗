@@ -1821,12 +1821,15 @@ function 处理值选择值(名称列表617, 本地值616 = {}) {
   const 节点行列表 = 名称列表617.length ? 名称列表617.map(数量值613 => `      - ${处理本地值622(数量值613)}`).join('\n') : '      - DIRECT';
   const 行列表612 = [];
   if (直连首次615) {
-    行列表612.push('      - "🎯 全球直连"', '      - "🚀 节点选择"');
+    行列表612.push('      - "🎯 全球直连"', '      - "🚀 节点选择"', '      - "♻️ 自动选择"', '      - "⚖️ 负载均衡"');
+    for (const 本地值611 of 值值614) 行列表612.push(`      - ${处理本地值622(本地值611)}`);
+    行列表612.push(节点行列表);
   } else {
-    行列表612.push('      - "🚀 节点选择"', '      - "🎯 全球直连"');
+    行列表612.push('      - "🚀 节点选择"', '      - "♻️ 自动选择"', '      - "⚖️ 负载均衡"');
+    for (const 本地值611 of 值值614) 行列表612.push(`      - ${处理本地值622(本地值611)}`);
+    行列表612.push(节点行列表);
+    行列表612.push('      - "🎯 全球直连"');
   }
-  for (const 本地值611 of 值值614) 行列表612.push(`      - ${处理本地值622(本地值611)}`);
-  行列表612.push(节点行列表);
   return 行列表612.join('\n');
 }
 
@@ -1951,7 +1954,25 @@ function 生成值值589(链接列表588, 本地值587 = {}) {
   const 值值580 = ['proxies:'];
   for (const 数量值579 of 节点列表586) 值值580.push(构建值节点行(数量值579));
   const 节点仅 = 名称列表584.length ? 名称列表584.map(数量值578 => `      - ${处理本地值622(数量值578)}`).join('\n') : '      - DIRECT';
-  const 值值577 = [解码64('cHJveHktZ3JvdXBzOg=='), '  - name: "🚀 节点选择"', '    type: select', '    proxies:', '      - "🎯 全球直连"', 节点仅, '  - name: "🌍 国外媒体"', '    type: select', '    proxies:', 处理值选择值(名称列表584), '  - name: "📺 哔哩哔哩"', '    type: select', '    proxies:', 处理值选择值(名称列表584, {
+  const 自动选择组 = [
+    '  - name: "♻️ 自动选择"',
+    '    type: url-test',
+    '    url: http://www.gstatic.com/generate_204',
+    '    interval: 300',
+    '    tolerance: 50',
+    '    proxies:',
+    节点仅
+  ].join('\n');
+  const 负载均衡组 = [
+    '  - name: "⚖️ 负载均衡"',
+    '    type: load-balance',
+    '    url: http://www.gstatic.com/generate_204',
+    '    interval: 300',
+    '    strategy: consistent-hashing',
+    '    proxies:',
+    节点仅
+  ].join('\n');
+  const 值值577 = [解码64('cHJveHktZ3JvdXBzOg=='), '  - name: "🚀 节点选择"', '    type: select', '    proxies:', '      - "♻️ 自动选择"', '      - "⚖️ 负载均衡"', 节点仅, '      - "🎯 全球直连"', 自动选择组, 负载均衡组, '  - name: "🌍 国外媒体"', '    type: select', '    proxies:', 处理值选择值(名称列表584), '  - name: "📺 哔哩哔哩"', '    type: select', '    proxies:', 处理值选择值(名称列表584, {
     directFirst: true
   }), '  - name: "📹 油管视频"', '    type: select', '    proxies:', 处理值选择值(名称列表584, {
     extraGroups: ['🌍 国外媒体']
